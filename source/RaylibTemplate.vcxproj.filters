@@ -27,6 +27,9 @@
     <ClCompile Include="Juego.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Trampolin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ObjetoFisico.h">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Juego.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Trampolin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -45,9 +45,14 @@ void Juego::Renderizar() {
             obj->Dibujar();
         }
 
+        // Dibujo el trampolín si existe
+        if (trampolin) {
+            trampolin->Dibujar();
+        }
+
         // Muestro carteles
-        DrawText("zgzgrgdgdds", 25, 21, 30, DARKGRAY);
-        DrawText("zggzgzrezrez", 25, 61, 30, DARKGRAY);
+        DrawText("Mzgzgrgdgdds", 25, 21, 30, DARKGRAY);
+        DrawText("R para reiniciar", 25, 61, 30, DARKGRAY);
 
         EndDrawing();
 
@@ -66,7 +71,8 @@ void Juego::Reiniciar() {
     // Pared Derecha: x=990, y=300, ancho=20, alto=600
     objetos.emplace_back(std::make_unique<Suelo>(mundo.get(), b2Vec2{ 990.0f, 300.0f }, 0.0f, 20.0f, 600.0f, b2_staticBody, DARKGRAY));
 
-
+    // Instancio el trampolín en el centro-abajo de la pantalla
+    trampolin = std::make_unique<Trampolin>(mundo.get(), b2Vec2{ 500.0f, 500.0f });
 
 }
 

@@ -1,5 +1,9 @@
 #pragma once
 
+#include "ObjetoFisico.h"
+#include "Trampolin.h"
+
+#include <box2d.h>
 #include <vector>
 #include <memory>
 
@@ -12,7 +16,7 @@ private:
     std::vector<std::unique_ptr<ObjetoFisico>> objetos;
 
     // Objetos
-    
+    std::unique_ptr<Trampolin> trampolin;
 
 public:
 
