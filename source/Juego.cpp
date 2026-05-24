@@ -1,5 +1,6 @@
 #include "Juego.h"
 #include "Suelo.h"
+#include "Pelota.h"
 
 Juego::Juego() {
 
@@ -26,6 +27,31 @@ void Juego::Actualizar() {
 
     // Avanzo la simulación física
     mundo->Step(1.0f / 60.0f, 8, 3);
+
+    // Lógica del spawner de pelotitas: 2% de probabilidad por frame de que caiga una
+    if (GetRandomValue(1, 100) <= 2) {
+
+        // Coordenada X random entre las dos paredes (10 a 990)
+        float xRandom = (float)GetRandomValue(30, 970);
+        // Coordenada Y arriba de la pantalla, para que caigan desde ahí
+        float yInicial = -20.0f;
+
+        // Radio random
+        float radioRandom = (float)GetRandomValue(5, 15);
+
+        // Color random (usando un arreglo simple de colores de Raylib)
+        Color colores[] = { RED, GREEN, BLUE, ORANGE, PURPLE, YELLOW };
+        Color colorRandom = colores[GetRandomValue(0, 5)];
+
+        // Instancio la pelotita y la meto al vector polimórfico
+        objetos.emplace_back(std::make_unique<Pelota>(
+            mundo.get(),
+            b2Vec2{ xRandom, yInicial },
+            radioRandom,
+            colorRandom
+        ));
+
+    }
 
     // Para reiniciar juego
     if (IsKeyPressed(KEY_R)) {

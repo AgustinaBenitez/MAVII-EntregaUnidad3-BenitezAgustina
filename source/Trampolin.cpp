@@ -26,8 +26,8 @@ Trampolin::Trampolin(b2World* mundo, b2Vec2 posicionInicial) {
 
     b2FixtureDef fixBase;
     fixBase.shape = &formaBase;
-    fixBase.density = 5.0f;
-    fixBase.friction = 0.3f;
+    fixBase.density = 1.0f;
+    fixBase.friction = 0.5f;
     base->CreateFixture(&fixBase);
 
     // CAMA ELÁSTICA (Cuerpo dinámico más liviano)
@@ -45,7 +45,7 @@ Trampolin::Trampolin(b2World* mundo, b2Vec2 posicionInicial) {
 
     b2FixtureDef fixCama;
     fixCama.shape = &formaCama;
-    fixCama.density = 1.0f;
+    fixCama.density = 0.5f;
     fixCama.restitution = 0.8f; // Rebote alto para los impactos
     cama->CreateFixture(&fixCama);
 
@@ -59,7 +59,7 @@ Trampolin::Trampolin(b2World* mundo, b2Vec2 posicionInicial) {
     // Configuro el motor del Prismatic Joint
     defPrismatico.enableMotor = true;
     defPrismatico.maxMotorForce = 2000.0f;
-    defPrismatico.motorSpeed = 3.0f;
+    defPrismatico.motorSpeed = 12.0f;
 
     jointPrismatico = (b2PrismaticJoint*)mundo->CreateJoint(&defPrismatico);
 
@@ -68,7 +68,7 @@ Trampolin::Trampolin(b2World* mundo, b2Vec2 posicionInicial) {
     defDistancia.Initialize(base, cama, base->GetPosition(), cama->GetPosition());
 
     // Parámetros elásticos de Box2D
-    defDistancia.stiffness = 4.0f;   // Velocidad de oscilación
+    defDistancia.stiffness = 10.0f;   // Velocidad de oscilación
     defDistancia.damping = 0.2f;  // Amortiguación baja para que siga rebotando
 
     jointDistancia = (b2DistanceJoint*)mundo->CreateJoint(&defDistancia);
