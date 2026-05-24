@@ -12,8 +12,8 @@ Pelota::Pelota(b2World* mundo, b2Vec2 posicion, float r, Color col)
     // Propiedades físicas
     b2FixtureDef fixPelota;
     fixPelota.shape = &formaPelota;
-    fixPelota.density = 1.0f;
-    fixPelota.friction = 0.3f;
+    fixPelota.density = 0.5f;
+    fixPelota.friction = 1.0f;
     fixPelota.restitution = 0.6f;
 
     cuerpo->CreateFixture(&fixPelota);

@@ -33,6 +33,9 @@
     <ClCompile Include="Pelota.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Pendulo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ObjetoFisico.h">
@@ -48,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Pelota.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pendulo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

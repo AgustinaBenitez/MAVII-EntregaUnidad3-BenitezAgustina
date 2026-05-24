@@ -8,16 +8,14 @@ private:
 
     // Cuerpos que conforman el mecanismo
     b2Body* anclaEstatica; // Necesario para enganchar el riel del Prismatic Joint
-    b2Body* base;
-    b2Body* cama;
+    b2Body* trampolinMov;
 
-    // Restricciones físicas
-    b2PrismaticJoint* jointPrismatico;
-    b2DistanceJoint* jointDistancia;
+    // Restricción física
+    b2PrismaticJoint* prismaticJoint;
 
     // Propiedades visuales
-    float ancho, altoBase, altoCama;
-    Color colorBase, colorCama;
+    float anchoTrampolinMov, altoTrampolinMov;
+    Color colorTrampolinMov;
 
 public:
 

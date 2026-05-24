@@ -2,102 +2,62 @@
 
 Trampolin::Trampolin(b2World* mundo, b2Vec2 posicionInicial) {
 
-    ancho = 100.0f;
-    altoBase = 20.0f;
-    altoCama = 10.0f;
-    colorBase = BLUE;
-    colorCama = RED;
+    anchoTrampolinMov = 250.0f;
+    altoTrampolinMov = 35.0f;
+    colorTrampolinMov = DARKBLUE;
 
-    // ANCLA ESTÁTICA (Punto fijo en el mundo para el riel)
+    // Ancla estática que va a ser el punto fijo en el mundo para el riel
     b2BodyDef defAncla;
     defAncla.type = b2_staticBody;
     defAncla.position = posicionInicial;
     anclaEstatica = mundo->CreateBody(&defAncla);
 
-    // BASE DEL TRAMPOLÍN (Cuerpo dinámico pesado)
-    b2BodyDef defBase;
-    defBase.type = b2_dynamicBody;
-    defBase.position = posicionInicial;
-    defBase.fixedRotation = true; // Para que no vuelque
-    base = mundo->CreateBody(&defBase);
+    // Armo trampolín movible
+    b2BodyDef defTrampolinMov;
+    defTrampolinMov.type = b2_dynamicBody;
+    defTrampolinMov.position = posicionInicial;
+    defTrampolinMov.fixedRotation = true;
+    trampolinMov = mundo->CreateBody(&defTrampolinMov);
 
-    b2PolygonShape formaBase;
-    formaBase.SetAsBox(ancho / 2.0f, altoBase / 2.0f);
+    b2PolygonShape formaTrampolinMov;
+    formaTrampolinMov.SetAsBox(anchoTrampolinMov / 2.0f, altoTrampolinMov / 2.0f);
 
-    b2FixtureDef fixBase;
-    fixBase.shape = &formaBase;
-    fixBase.density = 1.0f;
-    fixBase.friction = 0.5f;
-    base->CreateFixture(&fixBase);
+    b2FixtureDef fixTrampolinMov;
+    fixTrampolinMov.shape = &formaTrampolinMov;
+    fixTrampolinMov.density = 1.0f;
+    fixTrampolinMov.friction = 1.0f;
+    trampolinMov->CreateFixture(&fixTrampolinMov);
 
-    // CAMA ELÁSTICA (Cuerpo dinámico más liviano)
-    b2BodyDef defCama;
-    defCama.type = b2_dynamicBody;
-    // La posiciono un poco más arriba de la base
-    b2Vec2 posCama;
-    posCama.Set(posicionInicial.x, posicionInicial.y - 30.0f);
-    defCama.position = posCama;
-    defCama.fixedRotation = true;
-    cama = mundo->CreateBody(&defCama);
-
-    b2PolygonShape formaCama;
-    formaCama.SetAsBox(ancho / 2.0f, altoCama / 2.0f);
-
-    b2FixtureDef fixCama;
-    fixCama.shape = &formaCama;
-    fixCama.density = 0.5f;
-    fixCama.restitution = 0.8f; // Rebote alto para los impactos
-    cama->CreateFixture(&fixCama);
-
-    // PRISMATIC JOINT (Movimiento horizontal de la base)
-    b2PrismaticJointDef defPrismatico;
+    // PRISMATIC JOINT (Movimiento horizontal)
+    b2PrismaticJointDef prismaticDef;
     b2Vec2 ejeHorizontal;
     ejeHorizontal.Set(1.0f, 0.0f);
 
-    defPrismatico.Initialize(anclaEstatica, base, base->GetPosition(), ejeHorizontal);
+    prismaticDef.Initialize(anclaEstatica, trampolinMov, trampolinMov->GetPosition(), ejeHorizontal);
 
     // Configuro el motor del Prismatic Joint
-    defPrismatico.enableMotor = true;
-    defPrismatico.maxMotorForce = 2000.0f;
-    defPrismatico.motorSpeed = 12.0f;
+    prismaticDef.enableMotor = true;
+    prismaticDef.maxMotorForce = 500000.0f;
+    prismaticDef.motorSpeed = 12.0f;
 
-    jointPrismatico = (b2PrismaticJoint*)mundo->CreateJoint(&defPrismatico);
-
-    // DISTANCE JOINT (Efecto resorte entre la base y la cama)
-    b2DistanceJointDef defDistancia;
-    defDistancia.Initialize(base, cama, base->GetPosition(), cama->GetPosition());
-
-    // Parámetros elásticos de Box2D
-    defDistancia.stiffness = 10.0f;   // Velocidad de oscilación
-    defDistancia.damping = 0.2f;  // Amortiguación baja para que siga rebotando
-
-    jointDistancia = (b2DistanceJoint*)mundo->CreateJoint(&defDistancia);
+    prismaticJoint = (b2PrismaticJoint*)mundo->CreateJoint(&prismaticDef);
 
 }
 
 Trampolin::~Trampolin() {
 
     // Destruyo los cuerpos para que Box2D destruya automáticamente los joints asociados
-    if (base != nullptr) base->GetWorld()->DestroyBody(base);
-    if (cama != nullptr) cama->GetWorld()->DestroyBody(cama);
+    if (trampolinMov != nullptr) trampolinMov->GetWorld()->DestroyBody(trampolinMov);
     if (anclaEstatica != nullptr) anclaEstatica->GetWorld()->DestroyBody(anclaEstatica);
 
 }
 
 void Trampolin::Dibujar() {
 
-    // Dibujo la base
-    b2Vec2 posBase = base->GetPosition();
-    float angBase = base->GetAngle() * RAD2DEG;
-    Rectangle recBase = { posBase.x, posBase.y, ancho, altoBase };
-    Vector2 origBase = { ancho / 2.0f, altoBase / 2.0f };
-    DrawRectanglePro(recBase, origBase, angBase, colorBase);
-
-    // Dibujo la cama elástica
-    b2Vec2 posCama = cama->GetPosition();
-    float angCama = cama->GetAngle() * RAD2DEG;
-    Rectangle recCama = { posCama.x, posCama.y, ancho, altoCama };
-    Vector2 origCama = { ancho / 2.0f, altoCama / 2.0f };
-    DrawRectanglePro(recCama, origCama, angCama, colorCama);
+    b2Vec2 posTrampolinMov = trampolinMov->GetPosition();
+    float angTrampolinMov = trampolinMov->GetAngle() * RAD2DEG;
+    Rectangle recTrampolinMov = { posTrampolinMov.x, posTrampolinMov.y, anchoTrampolinMov, altoTrampolinMov };
+    Vector2 origTrampolinMov = { anchoTrampolinMov / 2.0f, altoTrampolinMov / 2.0f };
+    DrawRectanglePro(recTrampolinMov, origTrampolinMov, angTrampolinMov, colorTrampolinMov);
 
 }

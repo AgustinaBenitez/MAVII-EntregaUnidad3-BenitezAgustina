@@ -71,9 +71,14 @@ void Juego::Renderizar() {
             obj->Dibujar();
         }
 
-        // Dibujo el trampolín si existe
+        // Dibujo el trampolín y el péndulo si existen
+        
         if (trampolin) {
             trampolin->Dibujar();
+        }
+
+        if (pendulo) {
+            pendulo->Dibujar();
         }
 
         // Muestro carteles
@@ -97,8 +102,13 @@ void Juego::Reiniciar() {
     // Pared Derecha: x=990, y=300, ancho=20, alto=600
     objetos.emplace_back(std::make_unique<Suelo>(mundo.get(), b2Vec2{ 990.0f, 300.0f }, 0.0f, 20.0f, 600.0f, b2_staticBody, DARKGRAY));
 
-    // Instancio el trampolín en el centro-abajo de la pantalla
+    // Instancio los objetos
+    
+    // Coloco el trampolín en el centro-inferior de la pantalla
     trampolin = std::make_unique<Trampolin>(mundo.get(), b2Vec2{ 500.0f, 500.0f });
+
+    // Coloco el péndulo en el medio en el aire
+    pendulo = std::make_unique<Pendulo>(mundo.get(), b2Vec2{ 500.0f, 150.0f });
 
 }
 
