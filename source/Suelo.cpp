@@ -8,9 +8,9 @@ Suelo::Suelo(b2World* mundo, b2Vec2 pos, float ang, float w, float h, b2BodyType
 
     // Defino la forma rectangular
     b2PolygonShape formaSuelo;
-    formaSuelo.SetAsBox(w / 2.0f, h / 2.0f); // Porque Box2D usa semi-lados
+    formaSuelo.SetAsBox(w / 2.0f, h / 2.0f);
 
-    // Defino las propiedades físicas mediante una fixture
+    // Defino las propiedades físicas
     b2FixtureDef defFixture;
     defFixture.shape = &formaSuelo;
     defFixture.density = 1.0f;

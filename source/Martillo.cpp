@@ -49,14 +49,13 @@ Martillo::Martillo(b2World* mundo, b2Vec2 posicionInicial) {
 
     b2FixtureDef fixCabeza;
     fixCabeza.shape = &formaCabeza;
-    fixCabeza.density = 2.0f; // Más pesada para que tenga inercia al golpear
+    fixCabeza.density = 2.0f;
     fixCabeza.friction = 0.3f;
     fixCabeza.restitution = 0.5f;
     cabeza->CreateFixture(&fixCabeza);
 
-    // REVOLUTE JOINT
-    b2RevoluteJointDef defRevolute;
-    // Inicializamos indicando los cuerpos y el punto de rotación
+    // Inicializo el Revolute Joint indicando los cuerpos y el punto de rotación
+    b2RevoluteJointDef defRevolute;    
     defRevolute.Initialize(anclaEstatica, mango, posicionInicial);
 
     // Activo el motor rotacional para que golpee como martillo
@@ -66,7 +65,7 @@ Martillo::Martillo(b2World* mundo, b2Vec2 posicionInicial) {
 
     jointRevolute = (b2RevoluteJoint*)mundo->CreateJoint(&defRevolute);
 
-    // WELD JOINT para hacer la unión rígida entre mango y cabeza
+    // Weld Joint para hacer la unión rígida entre mango y cabeza
     b2WeldJointDef defWeld;
     b2Vec2 puntoDeUnion;
     puntoDeUnion.Set(posicionInicial.x, posicionInicial.y + altoMango);
@@ -101,5 +100,29 @@ void Martillo::Dibujar() {
     Rectangle recCabeza = { posCabeza.x, posCabeza.y, anchoCabeza, altoCabeza };
     Vector2 origCabeza = { anchoCabeza / 2.0f, altoCabeza / 2.0f };
     DrawRectanglePro(recCabeza, origCabeza, angCabeza, colorCabeza);
+
+}
+
+void Martillo::DibujarDebug() {
+
+    // Obtengo el ancla estática del Revolute Joint
+    b2Vec2 anclaR = jointRevolute->GetAnchorA();
+
+    // Punto de conexión y radio de giro imaginario
+    DrawCircle((int)anclaR.x, (int)anclaR.y, 6, RED);
+    DrawCircleLines((int)anclaR.x, (int)anclaR.y, altoMango, Fade(RED, 0.3f));
+
+    DrawText("Revolute Joint", (int)anclaR.x + 20, (int)anclaR.y - 10, 20, RED);
+    DrawText("Permite rotacion alrededor de un punto fijo", (int)anclaR.x + 20, (int)anclaR.y + 15, 10, DARKGRAY);
+
+    // Obtengo el ancla donde se unen mango y cabeza (weld joint)
+    b2Vec2 anclaW = jointWeld->GetAnchorA();
+
+    // Lo marco con una cruz para diferenciarlo --- Idea tomada de Gemini
+    DrawLine((int)anclaW.x - 10, (int)anclaW.y, (int)anclaW.x + 10, (int)anclaW.y, BLUE);
+    DrawLine((int)anclaW.x, (int)anclaW.y - 10, (int)anclaW.x, (int)anclaW.y + 10, BLUE);
+
+    DrawText("Weld Joint", (int)anclaW.x + 20, (int)anclaW.y - 10, 20, BLUE);
+    DrawText("Une dos cuerpos sin movimiento relativo", (int)anclaW.x + 20, (int)anclaW.y + 15, 10, DARKGRAY);
 
 }

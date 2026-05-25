@@ -2,6 +2,7 @@
 
 Trampolin::Trampolin(b2World* mundo, b2Vec2 posicionInicial) {
 
+    // Le doy la forma
     anchoTrampolinMov = 250.0f;
     altoTrampolinMov = 35.0f;
     colorTrampolinMov = DARKBLUE;
@@ -12,23 +13,26 @@ Trampolin::Trampolin(b2World* mundo, b2Vec2 posicionInicial) {
     defAncla.position = posicionInicial;
     anclaEstatica = mundo->CreateBody(&defAncla);
 
-    // Armo trampolín movible
+    // Propiedades
     b2BodyDef defTrampolinMov;
     defTrampolinMov.type = b2_dynamicBody;
     defTrampolinMov.position = posicionInicial;
     defTrampolinMov.fixedRotation = true;
+
     trampolinMov = mundo->CreateBody(&defTrampolinMov);
 
     b2PolygonShape formaTrampolinMov;
     formaTrampolinMov.SetAsBox(anchoTrampolinMov / 2.0f, altoTrampolinMov / 2.0f);
 
+    // Fixture
     b2FixtureDef fixTrampolinMov;
     fixTrampolinMov.shape = &formaTrampolinMov;
     fixTrampolinMov.density = 1.0f;
     fixTrampolinMov.friction = 1.0f;
+
     trampolinMov->CreateFixture(&fixTrampolinMov);
 
-    // PRISMATIC JOINT (Movimiento horizontal)
+    // Prismatic Joint para el movimiento horizontal restringido
     b2PrismaticJointDef prismaticDef;
     b2Vec2 ejeHorizontal;
     ejeHorizontal.Set(1.0f, 0.0f);
@@ -63,7 +67,7 @@ void Trampolin::Actualizar() {
     float traslacionActual = prismaticJoint->GetJointTranslation();
     float velocidadActual = prismaticJoint->GetMotorSpeed();
 
-    // Si llegó al tope derecho y se está moviendo a la derecha, invierto la velocidad a negativa
+    // Si llegó al tope derecho y se está moviendo a la derecha, invierto la velocidad pasándola a negativa
     if (traslacionActual >= prismaticJoint->GetUpperLimit() && velocidadActual > 0) {
         prismaticJoint->SetMotorSpeed(-300.0f);
     }
@@ -81,5 +85,24 @@ void Trampolin::Dibujar() {
     Rectangle recTrampolinMov = { posTrampolinMov.x, posTrampolinMov.y, anchoTrampolinMov, altoTrampolinMov };
     Vector2 origTrampolinMov = { anchoTrampolinMov / 2.0f, altoTrampolinMov / 2.0f };
     DrawRectanglePro(recTrampolinMov, origTrampolinMov, angTrampolinMov, colorTrampolinMov);
+
+}
+
+void Trampolin::DibujarDebug() {
+
+    // Obtengo el ancla estática del Prismatic Joint
+    b2Vec2 anclaP = prismaticJoint->GetAnchorA();
+
+    // Dibujo una línea semitransparente para marcar el eje de desplazamiento
+    DrawLineEx({ anclaP.x - 350.0f, anclaP.y }, { anclaP.x + 350.0f, anclaP.y }, 3.0f, Fade(GREEN, 0.4f));
+
+    // Dibujo el punto exacto de conexión (el ancla)
+    DrawCircle((int)anclaP.x, (int)anclaP.y, 6, DARKGREEN);
+
+    // Texto de identificación (arriba a la izquierda del mecanismo)
+    DrawText("Prismatic Joint", (int)anclaP.x - 350, (int)anclaP.y - 40, 20, DARKGREEN);
+
+    // Descripción basada en el apunte teórico
+    DrawText("Restringe el movimiento a una unica direccion", (int)anclaP.x - 350, (int)anclaP.y - 15, 10, DARKGRAY);
 
 }

@@ -25,5 +25,6 @@ public:
     ~Martillo();
 
     void Dibujar();
+    void DibujarDebug();
 
 };

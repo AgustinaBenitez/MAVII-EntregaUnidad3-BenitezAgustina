@@ -63,6 +63,11 @@ void Juego::Actualizar() {
         Reiniciar();
     }
 
+    // Para mostrar info en pantalla
+    if (IsKeyPressed(KEY_SPACE)) {
+        modoDebug = !modoDebug;
+    }
+
 }
 
 void Juego::Renderizar() {
@@ -90,7 +95,12 @@ void Juego::Renderizar() {
         DrawText("ESPACIO para explicaciones", 25, 21, 30, DARKGRAY);
         DrawText("R para reiniciar", 25, 61, 30, DARKGRAY);
 
-        EndDrawing();
+        if (modoDebug) {
+            if (trampolin) trampolin->DibujarDebug();
+            if (martillo) martillo->DibujarDebug();
+        }
+
+    EndDrawing();
 
 }
 

@@ -20,6 +20,9 @@ private:
     std::unique_ptr<Trampolin> trampolin;
     std::unique_ptr<Martillo> martillo;
 
+    // Para mostrar la info solicitada en pantalla sin ensuciar la simulación
+    bool modoDebug = false;
+
 public:
 
     Juego();
