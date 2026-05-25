@@ -42,7 +42,7 @@ Pendulo::Pendulo(b2World* mundo, b2Vec2 posicionInicial) {
     // Activamos el motor rotacional para que golpee como pendulo [cite: 524, 526]
     defRevolute.enableMotor = true;
     defRevolute.motorSpeed = 5.0f; // Velocidad de giro [cite: 527]
-    defRevolute.maxMotorTorque = 50000.0f; // Fuerza de rotación (Torque) 
+    defRevolute.maxMotorTorque = 50000000.0f; // Fuerza de rotación (Torque) 
 
     jointRevolute = (b2RevoluteJoint*)mundo->CreateJoint(&defRevolute);
 

@@ -37,8 +37,13 @@ Trampolin::Trampolin(b2World* mundo, b2Vec2 posicionInicial) {
 
     // Configuro el motor del Prismatic Joint
     prismaticDef.enableMotor = true;
-    prismaticDef.maxMotorForce = 500000.0f;
-    prismaticDef.motorSpeed = 12.0f;
+    prismaticDef.maxMotorForce = 50000.0f;
+    prismaticDef.motorSpeed = 300.0f;
+
+    // Activo y configuro los límites 
+    prismaticDef.enableLimit = true;
+    prismaticDef.lowerTranslation = -350.0f; // Hacia la izquierda
+    prismaticDef.upperTranslation = 350.0f;  // Hacia la derecha
 
     prismaticJoint = (b2PrismaticJoint*)mundo->CreateJoint(&prismaticDef);
 
@@ -49,6 +54,23 @@ Trampolin::~Trampolin() {
     // Destruyo los cuerpos para que Box2D destruya automáticamente los joints asociados
     if (trampolinMov != nullptr) trampolinMov->GetWorld()->DestroyBody(trampolinMov);
     if (anclaEstatica != nullptr) anclaEstatica->GetWorld()->DestroyBody(anclaEstatica);
+
+}
+
+void Trampolin::Actualizar() {
+
+    // Obtengo la posición actual relativa al ancla
+    float traslacionActual = prismaticJoint->GetJointTranslation();
+    float velocidadActual = prismaticJoint->GetMotorSpeed();
+
+    // Si llegó al tope derecho y se está moviendo a la derecha, invierto la velocidad a negativa
+    if (traslacionActual >= prismaticJoint->GetUpperLimit() && velocidadActual > 0) {
+        prismaticJoint->SetMotorSpeed(-300.0f);
+    }
+    // Si llegó al tope izquierdo y se está moviendo a la izquierda, invierto la velocidad a positiva
+    else if (traslacionActual <= prismaticJoint->GetLowerLimit() && velocidadActual < 0) {
+        prismaticJoint->SetMotorSpeed(300.0f);
+    }
 
 }
 

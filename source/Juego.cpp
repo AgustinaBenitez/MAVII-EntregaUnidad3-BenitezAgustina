@@ -28,6 +28,11 @@ void Juego::Actualizar() {
     // Avanzo la simulación física
     mundo->Step(1.0f / 60.0f, 8, 3);
 
+    // Muevo el trampolín autónomo
+    if (trampolin) {
+        trampolin->Actualizar();
+    }
+
     // Lógica del spawner de pelotitas: 2% de probabilidad por frame de que caiga una
     if (GetRandomValue(1, 100) <= 2) {
 
@@ -93,14 +98,6 @@ void Juego::Reiniciar() {
 
     // Creo el suelo inicial (Cuerpo Estático)
     objetos.emplace_back(std::make_unique<Suelo>(mundo.get(), b2Vec2{ 500, 580 }, 0.0f, 1000.0f, 40.0f, b2_staticBody, DARKGRAY));
-
-    /////// A partir del suelo me armo los límites de la pantalla
-
-    // Pared Izquierda: x=10 (un poquito adentro), y=300 (mitad de alto), ancho=20, alto=600
-    objetos.emplace_back(std::make_unique<Suelo>(mundo.get(), b2Vec2{ 10.0f, 300.0f }, 0.0f, 20.0f, 600.0f, b2_staticBody, DARKGRAY));
-
-    // Pared Derecha: x=990, y=300, ancho=20, alto=600
-    objetos.emplace_back(std::make_unique<Suelo>(mundo.get(), b2Vec2{ 990.0f, 300.0f }, 0.0f, 20.0f, 600.0f, b2_staticBody, DARKGRAY));
 
     // Instancio los objetos
     

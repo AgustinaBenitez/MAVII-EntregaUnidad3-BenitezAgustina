@@ -22,6 +22,7 @@ public:
     Trampolin(b2World* mundo, b2Vec2 posicionInicial);
     ~Trampolin();
 
+    void Actualizar();
     void Dibujar();
 
 };
