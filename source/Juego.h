@@ -2,7 +2,7 @@
 
 #include "ObjetoFisico.h"
 #include "Trampolin.h"
-#include "Pendulo.h"
+#include "Martillo.h"
 
 #include <box2d.h>
 #include <vector>
@@ -18,7 +18,7 @@ private:
 
     // Objetos
     std::unique_ptr<Trampolin> trampolin;
-    std::unique_ptr<Pendulo> pendulo;
+    std::unique_ptr<Martillo> martillo;
 
 public:
 

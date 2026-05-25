@@ -76,18 +76,18 @@ void Juego::Renderizar() {
             obj->Dibujar();
         }
 
-        // Dibujo el trampolín y el péndulo si existen
+        // Dibujo el trampolín y el martillo si existen
         
         if (trampolin) {
             trampolin->Dibujar();
         }
 
-        if (pendulo) {
-            pendulo->Dibujar();
+        if (martillo) {
+            martillo->Dibujar();
         }
 
         // Muestro carteles
-        DrawText("Mzgzgrgdgdds", 25, 21, 30, DARKGRAY);
+        DrawText("ESPACIO para explicaciones", 25, 21, 30, DARKGRAY);
         DrawText("R para reiniciar", 25, 61, 30, DARKGRAY);
 
         EndDrawing();
@@ -104,8 +104,8 @@ void Juego::Reiniciar() {
     // Coloco el trampolín en el centro-inferior de la pantalla
     trampolin = std::make_unique<Trampolin>(mundo.get(), b2Vec2{ 500.0f, 500.0f });
 
-    // Coloco el péndulo en el medio en el aire
-    pendulo = std::make_unique<Pendulo>(mundo.get(), b2Vec2{ 500.0f, 150.0f });
+    // Coloco el martillo en el medio en el aire
+    martillo = std::make_unique<Martillo>(mundo.get(), b2Vec2{ 500.0f, 150.0f });
 
 }
 
